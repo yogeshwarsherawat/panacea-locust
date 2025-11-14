@@ -6,3 +6,16 @@ reports/
 test.py
 rough.py
 scripts
+*.log
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pywz
+*.pyzw
+*.pyzwz
+*.pyzwzw
+*.pyzwzwzw
+*__pycache__*
+*cpython*
