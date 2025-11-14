@@ -32,6 +32,9 @@ class JsonPayload:
 
     def get_session_ids(self):
         return self.payload_data["session_ids"]
+    
+    def get_messages(self):
+        return self.payload_data["messages"]
 
 
 json_payload = JsonPayload(session_id="")

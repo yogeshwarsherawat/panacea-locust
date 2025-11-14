@@ -96,9 +96,23 @@ class Config:
 
     # Task Weight Configuration
     TASK_WEIGHTS = {
+        "reports": 1,
+        "list-combos": 1,
+        "events": 1,
+        "ask-ai": 1,
+        "report-summary": 1,
+        "logs-info": 1,
+        "logs-filter-options": 1,
+    }
+
+    PROD_TASK_WEIGHTS = {
         "reports": 5,
-        "list-combos": 2,
-        "events": 2,
+        "list-combos": 3,
+        "events": 1,
+        "ask-ai": 1,
+        "report-summary": 1,
+        "logs-info": 1,
+        "logs-filter-options": 1,
     }
 
     # Network Configuration

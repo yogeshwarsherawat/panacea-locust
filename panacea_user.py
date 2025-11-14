@@ -6,14 +6,11 @@ for session management, request handling, and user initialization.
 """
 
 import logging
-import random
-import time
 from typing import Any, Dict
 
 from locust import HttpUser, between, task
 
 from config import config
-from payloads.json_payload import json_payload
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -98,18 +95,8 @@ class PanaceaAPIUser(HttpUser):
 
         logger.info(f"Session ID: {self.session_id}")
         api = ReportsAPI()
-        payload = api.generate_payload("default")
-        # Randomly select a payload type
-        payload_types = [
-            "default",
-            "page_2",
-            "case_owner_email",
-            "sfdc_case_number",
-            "case_owner_email_and_sfdc_case_number",
-        ]
-        payload_type = random.choice(payload_types)
-        # Generate payload
-        payload = api.generate_payload(payload_type)
+        # Generate payload with random selection handled by the API
+        payload = api.generate_payload()
 
         logger.info(
             f"Sending request to {api.get_api_endpoint()} with payload {payload}"
@@ -118,24 +105,14 @@ class PanaceaAPIUser(HttpUser):
             api.get_api_method(), api.get_api_endpoint(), json_data=payload
         )
 
-    @task(config.TASK_WEIGHTS["reports"])
+    @task(config.TASK_WEIGHTS["list-combos"])
     def test_list_combos_endpoint(self):
         from payloads.api_payloads.list_combos import ListCombosAPI
 
         logger.info(f"Session ID: {self.session_id}")
         api = ListCombosAPI()
-        payload = api.generate_payload("default")
-        # Randomly select a payload type
-        payload_types = [
-            "default",
-            "page_2",
-            "case_owner_email",
-            "sfdc_case_number",
-            "case_owner_email_and_sfdc_case_number",
-        ]
-        payload_type = random.choice(payload_types)
-        # Generate payload
-        payload = api.generate_payload(payload_type)
+        # Generate payload with random selection handled by the API
+        payload = api.generate_payload()
 
         logger.info(
             f"Sending request to {api.get_api_endpoint()} with payload {payload}"
@@ -150,16 +127,8 @@ class PanaceaAPIUser(HttpUser):
 
         logger.info(f"Session ID: {self.session_id}")
         api = EventsAPI()
-        # Randomly select a payload type
-        payload_types = [
-            "default",
-            "combo_id_only",
-            "combo_id_with_curated",
-            "bundle_id_with_curated",
-        ]
-        payload_type = random.choice(payload_types)
-        # Generate payload (query parameters for GET request)
-        payload = api.generate_payload(payload_type)
+        # Generate payload with random selection handled by the API (query parameters for GET request)
+        payload = api.generate_payload()
 
         logger.info(
             f"Sending request to {api.get_api_endpoint()} with params {payload}"
@@ -171,4 +140,83 @@ class PanaceaAPIUser(HttpUser):
             api.get_api_endpoint(),
             params=payload,
             name="/api/v1/insights/events",
+        )
+
+    @task(config.TASK_WEIGHTS["ask-ai"])
+    def test_ask_ai_endpoint(self):
+        from payloads.api_payloads.ask_ai import AskAIAPI
+
+        logger.info(f"Session ID: {self.session_id}")
+        api = AskAIAPI()
+        # Generate payload with random selection handled by the API
+        payload = api.generate_payload()
+
+        logger.info(
+            f"Sending request to {api.get_api_endpoint()} with payload {payload}"
+        )
+        self.make_request(
+            api.get_api_method(), api.get_api_endpoint(), json_data=payload
+        )
+
+    @task(config.TASK_WEIGHTS["report-summary"])
+    def test_report_summary_endpoint(self):
+        from payloads.api_payloads.ai_summary import AISummaryAPI
+
+        logger.info(f"Session ID: {self.session_id}")
+        api = AISummaryAPI()
+        # Generate payload with random selection handled by the API (query parameters for GET request)
+        payload = api.generate_payload()
+
+        logger.info(
+            f"Sending request to {api.get_api_endpoint()} with params {payload}"
+        )
+        # For GET requests, pass payload as params instead of json_data
+        # Use a consistent name to group all report_summary requests together in Locust stats
+        self.make_request(
+            api.get_api_method(),
+            api.get_api_endpoint(),
+            params=payload,
+            name="/api/v1/insights/ai/report_summary",
+        )
+
+    @task(config.TASK_WEIGHTS["logs-info"])
+    def test_logs_info_endpoint(self):
+        from payloads.api_payloads.logs_info import LogsInfoAPI
+
+        logger.info(f"Session ID: {self.session_id}")
+        api = LogsInfoAPI()
+        # Generate payload with random selection handled by the API (query parameters for GET request)
+        payload = api.generate_payload()
+
+        logger.info(
+            f"Sending request to {api.get_api_endpoint()} with params {payload}"
+        )
+        # For GET requests, pass payload as params instead of json_data
+        # Use a consistent name to group all logs_info requests together in Locust stats
+        self.make_request(
+            api.get_api_method(),
+            api.get_api_endpoint(),
+            params=payload,
+            name="/api/v1/insights/logs/info",
+        )
+
+    @task(config.TASK_WEIGHTS["logs-filter-options"])
+    def test_logs_filter_options_endpoint(self):
+        from payloads.api_payloads.logs_filter_options import LogsFilterOptionsAPI
+
+        logger.info(f"Session ID: {self.session_id}")
+        api = LogsFilterOptionsAPI()
+        # Generate payload with random selection handled by the API (query parameters for GET request)
+        payload = api.generate_payload()
+
+        logger.info(
+            f"Sending request to {api.get_api_endpoint()} with params {payload}"
+        )
+        # For GET requests, pass payload as params instead of json_data
+        # Use a consistent name to group all logs_filter_options requests together in Locust stats
+        self.make_request(
+            api.get_api_method(),
+            api.get_api_endpoint(),
+            params=payload,
+            name="/api/v1/insights/logs/filter-options",
         )
