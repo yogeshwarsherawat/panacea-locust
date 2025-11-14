@@ -1,6 +1,4 @@
 import json
-from abc import ABC, abstractmethod
-from this import d
 
 from config import payload_config
 
@@ -8,7 +6,7 @@ from config import payload_config
 class JsonPayload:
     def __init__(self, session_id: str):
         self.payload_data = json.load(open(payload_config.PAYLOAD_JSON_FILE_PATH))
-    
+
     def get_valid_bundle_ids(self):
         return self.payload_data["bundle_ids"]
 
@@ -32,10 +30,10 @@ class JsonPayload:
 
     def get_session_ids(self):
         return self.payload_data["session_ids"]
-    
+
     def get_messages(self):
         return self.payload_data["messages"]
-    
+
     def get_bundle_ids_for_log_viewer_apis(self):
         return list(self.payload_data["bundle_data"].keys())
 

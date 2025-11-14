@@ -6,7 +6,6 @@ Settings can be overridden via environment variables.
 """
 
 import os
-from typing import Any, Dict, List
 
 # Try to load .env file if available
 try:
@@ -23,13 +22,6 @@ class Config:
 
     # API Configuration
     DEFAULT_HOST = os.getenv("PANACEA_HOST", "http://10.113.24.33:9898")
-    API_VERSION = "v1"
-    BASE_PATH = f"/api/{API_VERSION}"
-
-    # User Configuration
-    MIN_USERS = int(os.getenv("LOCUST_MIN_USERS", "1"))
-    MAX_USERS = int(os.getenv("LOCUST_MAX_USERS", "100"))
-    SPAWN_RATE = float(os.getenv("LOCUST_SPAWN_RATE", "2"))
 
     # Wait Time Configuration (in seconds)
     STANDARD_USER_WAIT_MIN = float(os.getenv("STANDARD_WAIT_MIN", "1.0"))
@@ -37,27 +29,6 @@ class Config:
 
     # User Distribution Weights
     STANDARD_USER_WEIGHT = int(os.getenv("STANDARD_USER_WEIGHT", "5"))
-
-    # Bundle ID Configuration
-    BUNDLE_ID_MIN = int(os.getenv("BUNDLE_ID_MIN", "800"))
-    BUNDLE_ID_MAX = int(os.getenv("BUNDLE_ID_MAX", "1000"))
-    BUNDLE_ID_RANGE_PER_USER = int(os.getenv("BUNDLE_ID_RANGE_PER_USER", "50"))
-    BUNDLE_ID_OVERLAP_PERCENTAGE = float(
-        os.getenv("BUNDLE_ID_OVERLAP_PERCENTAGE", "0.3")
-    )
-
-    # Combo ID Configuration
-    COMBO_ID_MIN = int(os.getenv("COMBO_ID_MIN", "1"))
-    COMBO_ID_MAX = int(os.getenv("COMBO_ID_MAX", "100"))
-    COMBO_ID_RANGE_PER_USER = int(os.getenv("COMBO_ID_RANGE_PER_USER", "20"))
-
-    # SFDC Case Configuration
-    SFDC_CASE_MIN = int(os.getenv("SFDC_CASE_MIN", "10000000"))
-    SFDC_CASE_MAX = int(os.getenv("SFDC_CASE_MAX", "99999999"))
-
-    # User Pool Configuration
-    USER_POOL_SIZE = int(os.getenv("USER_POOL_SIZE", "1000"))
-    USER_ID_PREFIX = os.getenv("USER_ID_PREFIX", "loadtest_user")
 
     # Session Configuration
     SESSION_ID_LENGTH = int(os.getenv("SESSION_ID_LENGTH", "32"))
@@ -109,60 +80,11 @@ class Config:
         "logs-severity-count": 1,
     }
 
-    PROD_TASK_WEIGHTS = {
-        "reports": 5,
-        "list-combos": 3,
-        "events": 1,
-        "ask-ai": 1,
-        "report-summary": 1,
-        "logs-info": 1,
-        "logs-filter-options": 1,
-        "logs-search": 10,
-        "logs-histogram": 10,
-        "logs-heatmap": 10,
-        "logs-severity-count": 10,
-    }
-
-    # Network Configuration
-    IP_RANGES = ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
-
-    @classmethod
-    def get_api_endpoint(cls, endpoint: str) -> str:
-        """Get full API endpoint URL."""
-        return f"{cls.BASE_PATH}/{endpoint.lstrip('/')}"
-
-    @classmethod
-    def get_bundle_id_range(cls, user_index: int) -> tuple:
-        """Get bundle ID range for a specific user."""
-        start = cls.BUNDLE_ID_MIN + (user_index * cls.BUNDLE_ID_RANGE_PER_USER)
-        end = min(start + cls.BUNDLE_ID_RANGE_PER_USER, cls.BUNDLE_ID_MAX)
-
-        # Add overlap with other users
-        overlap_size = int(
-            cls.BUNDLE_ID_RANGE_PER_USER * cls.BUNDLE_ID_OVERLAP_PERCENTAGE
-        )
-        start = max(cls.BUNDLE_ID_MIN, start - overlap_size)
-        end = min(cls.BUNDLE_ID_MAX, end + overlap_size)
-
-        return (start, end)
-
-    @classmethod
-    def get_combo_id_range(cls, user_index: int) -> tuple:
-        """Get combo ID range for a specific user."""
-        start = cls.COMBO_ID_MIN + (user_index * cls.COMBO_ID_RANGE_PER_USER)
-        end = min(start + cls.COMBO_ID_RANGE_PER_USER, cls.COMBO_ID_MAX)
-        return (start, end)
-
     @classmethod
     def validate_config(cls) -> bool:
         """Validate configuration values."""
         try:
-            assert cls.BUNDLE_ID_MIN < cls.BUNDLE_ID_MAX
-            assert cls.COMBO_ID_MIN < cls.COMBO_ID_MAX
-            assert cls.SFDC_CASE_MIN < cls.SFDC_CASE_MAX
-            assert 0 <= cls.BUNDLE_ID_OVERLAP_PERCENTAGE <= 1
             assert cls.SESSION_ID_LENGTH > 0
-            assert cls.USER_POOL_SIZE > 0
             return True
         except AssertionError:
             return False

@@ -8,14 +8,13 @@ the lifecycle of Locust load tests.
 import json
 import logging
 import os
+import time
 from datetime import datetime
 from typing import Any, Dict
 
 from locust import events
 
 from config import config
-from payloads import payload_generator
-import time
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -74,19 +73,7 @@ class TestMetrics:
 
     def _get_bundle_id_coverage(self) -> Dict[str, Any]:
         """Get statistics about bundle ID coverage across users."""
-        all_bundle_ids = set()
-
-        for user_id in self.user_stats:
-            user_pool = payload_generator.get_user_pool(user_id)
-            if user_pool:
-                all_bundle_ids.update(user_pool.bundle_ids)
-
-        return {
-            "total_unique_bundle_ids": len(all_bundle_ids),
-            "min_bundle_id": min(all_bundle_ids) if all_bundle_ids else None,
-            "max_bundle_id": max(all_bundle_ids) if all_bundle_ids else None,
-            "configured_range": (config.BUNDLE_ID_MIN, config.BUNDLE_ID_MAX),
-        }
+        return {}
 
 
 # Global metrics instance
@@ -105,7 +92,10 @@ def on_test_start(environment, **kwargs):
     logger.info("Json Payload loading into memory")
     start_time = time.time()
     from payloads.json_payload import json_payload
-    logger.info(f"Json Payload loaded into memory in {time.time() - start_time} seconds")
+
+    logger.info(
+        f"Json Payload loaded into memory in {time.time() - start_time} seconds"
+    )
 
     test_metrics.start_time = datetime.utcnow()
 
@@ -115,9 +105,6 @@ def on_test_start(environment, **kwargs):
         "user_count": getattr(environment, "user_count", "unknown"),
         "spawn_rate": getattr(environment, "spawn_rate", "unknown"),
         "run_time": getattr(environment, "run_time", "unknown"),
-        "bundle_id_range": (config.BUNDLE_ID_MIN, config.BUNDLE_ID_MAX),
-        "combo_id_range": (config.COMBO_ID_MIN, config.COMBO_ID_MAX),
-        "user_pool_size": config.USER_POOL_SIZE,
         "session_id_length": config.SESSION_ID_LENGTH,
     }
 
@@ -148,8 +135,6 @@ def on_test_stop(environment, **kwargs):
 
     if summary["test_duration_seconds"]:
         logger.info(f"Test Duration: {summary['test_duration_seconds']:.2f} seconds")
-
-  
 
     # Save test summary to file
     _save_test_summary(summary)
