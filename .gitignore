@@ -1,6 +1,6 @@
 .env
 payloads/payload.json
-payload.
+payload.json
 results/
 reports/
 test.py
