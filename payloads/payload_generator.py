@@ -35,21 +35,6 @@ class PayloadGenerator:
             "trace",
             "unknown",
         ]
-        components = [
-            "acropolis",
-            "stargate",
-            "cassandra",
-            "zookeeper",
-            "insights_server",
-            "prism",
-            "genesis",
-            "cerebro",
-            "curator",
-            "chronos",
-            "uhura",
-            "lazan",
-            "minerva",
-        ]
         bundle_ids = list(self.clickhouse_dao.get_valid_log_bundle_ids())
         combo_ids = list(self.clickhouse_dao.get_valid_combo_ids())
 
@@ -60,8 +45,8 @@ class PayloadGenerator:
             "log_level_types": log_level_types,
             "bundle_ids": bundle_ids,
             "combo_ids": combo_ids,
-            "components": components,
-            "messages": self.clickhouse_dao.get_messages_from_db()
+            "messages": self.clickhouse_dao.get_messages_from_db(),
+            "bundle_data": self.clickhouse_dao.get_bundle_data(bundle_ids)
         }
 
         with open(payload_config.PAYLOAD_JSON_FILE_PATH, "w") as f:

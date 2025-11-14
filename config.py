@@ -96,13 +96,17 @@ class Config:
 
     # Task Weight Configuration
     TASK_WEIGHTS = {
-        "reports": 1,
-        "list-combos": 1,
-        "events": 1,
-        "ask-ai": 1,
-        "report-summary": 1,
-        "logs-info": 1,
+        "reports": 0,
+        "list-combos": 0,
+        "events": 0,
+        "ask-ai": 0,
+        "report-summary": 0,
+        "logs-info": 0,
         "logs-filter-options": 1,
+        "logs-search": 1,
+        "logs-histogram": 1,
+        "logs-heatmap": 1,
+        "logs-severity-count": 1,
     }
 
     PROD_TASK_WEIGHTS = {
@@ -113,6 +117,10 @@ class Config:
         "report-summary": 1,
         "logs-info": 1,
         "logs-filter-options": 1,
+        "logs-search": 10,
+        "logs-histogram": 10,
+        "logs-heatmap": 10,
+        "logs-severity-count": 10,
     }
 
     # Network Configuration

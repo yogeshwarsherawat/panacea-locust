@@ -27,3 +27,4 @@ class AskAIAPI(BaseAPI):
             payload_type = AskAIAPI.PayloadTypes.DEFAULT
         message = random.choice(self.messages)
         return {"messages": [message] }
+

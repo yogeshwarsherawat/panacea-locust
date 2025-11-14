@@ -135,5 +135,47 @@ class ClickHouseDAO:
                 """
         result = client.execute(query, {"limit": limit})
         return [result[0] for result in result]
+    
+    def get_components_by_bundle_id(self, bundle_id: int) -> List[str]:
+        client = self._get_client()
+        query = f"select distinct filename_without_ext from nu_logs_local where log_bundle_id = {bundle_id} order by rand() limit 10"
+        result = client.execute(query)
+        return [result[0] for result in result]
+    
+    def get_source_log_filenames_by_bundle_id(self, bundle_id: int) -> List[str]:
+        client = self._get_client()
+        query = f"select distinct source_log_filename from nu_logs_local where log_bundle_id = {bundle_id} order by rand() limit 10"
+        result = client.execute(query)
+        return [result[0] for result in result]
+    
+    def get_start_and_end_time_by_bundle_id(self, bundle_id: int) -> Tuple[int, int]:
+        client = self._get_client()
+        query = f"select min(event_time) as start_time, max(event_time) as end_time from nu_logs_local where log_bundle_id = {bundle_id}"
+        result = client.execute(query)
+        return result[0][0], result[0][1]
+    
+    def get_log_bundle_ids_having_log_count_greater_than(self, count: int, limit: int = 10) -> List[int]:
+        query = f"""
+                    SELECT 
+                    log_bundle_id,
+                    count(*) AS cnt
+                    FROM panacea.nu_logs_local
+                    GROUP BY log_bundle_id
+                    HAVING cnt >{count} limit {limit};"""
+        client = self._get_client()
+        result = client.execute(query)
+        return [result[0] for result in result]
+
+    def get_bundle_data(self, bundle_id: int) -> Dict[str, any]:
+        bundle_ids = self.get_log_bundle_ids_having_log_count_greater_than(10, 10)
+        bundle_id_to_data = {bundle_id: {} for bundle_id in bundle_ids}
+        for bundle_id in bundle_ids:
+            bundle_id_to_data[bundle_id]["components"] = self.get_components_by_bundle_id(bundle_id)
+            bundle_id_to_data[bundle_id]["source_log_filenames"] = self.get_source_log_filenames_by_bundle_id(bundle_id)
+            start_time, end_time = self.get_start_and_end_time_by_bundle_id(bundle_id)
+            bundle_id_to_data[bundle_id]["start_time"] = start_time.strftime("%Y-%m-%d %H:%M:%S")
+            bundle_id_to_data[bundle_id]["end_time"] = end_time.strftime("%Y-%m-%d %H:%M:%S")
+        
+        return bundle_id_to_data
 
 

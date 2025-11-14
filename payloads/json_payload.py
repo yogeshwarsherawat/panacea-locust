@@ -35,6 +35,12 @@ class JsonPayload:
     
     def get_messages(self):
         return self.payload_data["messages"]
+    
+    def get_bundle_ids_for_log_viewer_apis(self):
+        return list(self.payload_data["bundle_data"].keys())
+
+    def get_bundle_data(self, bundle_id: int):
+        return self.payload_data["bundle_data"][bundle_id]
 
 
 json_payload = JsonPayload(session_id="")

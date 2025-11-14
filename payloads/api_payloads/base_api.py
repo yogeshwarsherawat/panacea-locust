@@ -11,14 +11,9 @@ class BaseAPI(ABC):
     def get_api_endpoint(self):
         return f"{config.DEFAULT_HOST}/{self.endpoint}"
 
+    @abstractmethod
     def get_api_method(self):
-        return "POST"
-
-    def generate_headers(self):
-        return {
-            "X-Session-Id": self.session_id,
-            "Content-Type": "application/json",
-        }
+        pass
 
     @abstractmethod
     def generate_payload(self):

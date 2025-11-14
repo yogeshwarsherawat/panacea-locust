@@ -15,6 +15,7 @@ from locust import events
 
 from config import config
 from payloads import payload_generator
+import time
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -101,8 +102,10 @@ def on_test_start(environment, **kwargs):
         **kwargs: Additional keyword arguments
     """
     logger.info("On test start")
-    logger.info("Json Payload loaded into memory")
+    logger.info("Json Payload loading into memory")
+    start_time = time.time()
     from payloads.json_payload import json_payload
+    logger.info(f"Json Payload loaded into memory in {time.time() - start_time} seconds")
 
     test_metrics.start_time = datetime.utcnow()
 
