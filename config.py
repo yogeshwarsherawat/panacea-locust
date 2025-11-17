@@ -35,11 +35,11 @@ class Config:
     SESSION_HEADER_NAME = "X-Session-Id"
 
     # ClickHouse Configuration
-    CLICKHOUSE_HOST = os.getenv("CLICKHOUSE_HOST", "panacea-clickhouse.cpaasonprem.com")
+    CLICKHOUSE_HOST = os.getenv("CLICKHOUSE_HOST", "localhost")
     CLICKHOUSE_PORT = int(os.getenv("CLICKHOUSE_PORT", "9000"))
     CLICKHOUSE_DATABASE = os.getenv("CLICKHOUSE_DATABASE", "panacea")
-    CLICKHOUSE_USER = os.getenv("CLICKHOUSE_USER", "panacea_user")
-    CLICKHOUSE_PASSWORD = os.getenv("CLICKHOUSE_PASSWORD", "qwerty")
+    CLICKHOUSE_USER = os.getenv("CLICKHOUSE_USER", "panacea")
+    CLICKHOUSE_PASSWORD = os.getenv("CLICKHOUSE_PASSWORD", "panacea")
 
     # Database Integration Settings
     USE_DATABASE_DATA = os.getenv("USE_DATABASE_DATA", "false").lower() == "true"
@@ -68,11 +68,11 @@ class Config:
     # Task Weight Configuration
     TASK_WEIGHTS = {
         "reports": 0,
-        "list-combos": 0,
-        "events": 0,
-        "ask-ai": 0,
-        "report-summary": 0,
-        "logs-info": 0,
+        "list-combos": 1,
+        "events": 1,
+        "ask-ai": 1,
+        "report-summary": 1,
+        "logs-info": 1,
         "logs-filter-options": 1,
         "logs-search": 1,
         "logs-histogram": 1,
@@ -110,3 +110,4 @@ class PayloadConfig:
 
 
 payload_config = PayloadConfig()
+print(payload_config.PAYLOAD_JSON_FILE_PATH)

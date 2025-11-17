@@ -105,19 +105,19 @@ export CLICKHOUSE_PASSWORD="qwerty"
 export USE_DATABASE_DATA="true"
 
 # Run basic load test
-locust -f locustfile.py --host=https://your-api-server.com
+locust -f locustfile.py --host=http://panacea.gamma.p10y.ntnxdpro.com
 ```
 
 ### Basic Usage
 ```bash
 # Interactive mode with web UI
-locust -f locustfile.py --host=https://your-api-server.com
+locust -f locustfile.py --host=http://panacea.gamma.p10y.ntnxdpro.com
 
 # Headless mode with specific parameters
-locust -f locustfile.py --host=https://your-api-server.com -u 50 -r 5 -t 300s --headless
+locust -f locustfile.py --host=http://panacea.gamma.p10y.ntnxdpro.com -u 50 -r 5 -t 300s --headless
 
 # With results export
-locust -f locustfile.py --host=https://your-api-server.com -u 30 -r 4 -t 600s --headless --csv=results --html=report.html
+locust -f locustfile.py --host=http://panacea.gamma.p10y.ntnxdpro.com -u 30 -r 4 -t 600s --headless --csv=results --html=report.html
 ```
 
 ## 🎯 User Types and Distribution
@@ -146,7 +146,7 @@ All configuration can be customized via environment variables:
 
 ```bash
 # API Configuration
-export PANACEA_HOST=https://your-api-server.com
+export PANACEA_HOST=http://panacea.gamma.p10y.ntnxdpro.com
 export LOCUST_MIN_USERS=1
 export LOCUST_MAX_USERS=100
 export LOCUST_SPAWN_RATE=2
@@ -408,24 +408,24 @@ logging.basicConfig(level=logging.DEBUG)
 
 ### Smoke Test
 ```bash
-locust -f locustfile.py --host=https://your-api-server.com -u 5 -r 1 -t 60s --headless
+locust -f locustfile.py --host=http://panacea.gamma.p10y.ntnxdpro.com -u 5 -r 1 -t 60s --headless
 ```
 
 ### Load Test
 ```bash
-locust -f locustfile.py --host=https://your-api-server.com -u 25 -r 3 -t 600s --headless
+locust -f locustfile.py --host=http://panacea.gamma.p10y.ntnxdpro.com -u 25 -r 3 -t 600s --headless
 ```
 
 ### Stress Test
 ```bash
-locust -f locustfile.py --host=https://your-api-server.com -u 100 -r 10 -t 1800s --headless
+locust -f locustfile.py --host=http://panacea.gamma.p10y.ntnxdpro.com -u 100 -r 10 -t 1800s --headless
 ```
 
 ### Analytics Focus Test
 ```bash
 # Set higher weight for analytics users
 export ANALYTICS_USER_WEIGHT=5
-locust -f locustfile.py --host=https://your-api-server.com -u 50 -r 5 -t 900s --headless
+locust -f locustfile.py --host=http://panacea.gamma.p10y.ntnxdpro.com -u 50 -r 5 -t 900s --headless
 ```
 
 ## 🤝 Contributing

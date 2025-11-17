@@ -11,6 +11,7 @@ import random
 from typing import Any, Dict
 
 from locust import HttpUser, between, task
+from payloads.json_payload import json_payload
 
 from config import config
 
@@ -41,8 +42,7 @@ class PanaceaAPIUser(HttpUser):
     def on_start(self):
         """Initialize user-specific data when the user starts."""
         # Generate unique user identifier
-        self.session_id = "cf811e567c5d42e9bd61a3562ecdd29f"
-
+        self.session_id = random.choice(json_payload.get_session_ids())
         # Set up session headers
         self._setup_session()
 

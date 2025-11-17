@@ -37,7 +37,7 @@ class LogViewerAPI(BaseAPI):
         components = []
         use_components = random.choice([True, False, False, False, False])
         if use_components:
-            components_count_to_use = random.randint(1, 3)
+            components_count_to_use = min(random.randint(1, 3), len(self.components))
             components_to_use = random.sample(self.components, components_count_to_use)
             components.extend(components_to_use)
         return components
@@ -46,7 +46,7 @@ class LogViewerAPI(BaseAPI):
         source_log_filenames = []
         use_source_log_filenames = random.choice([True, False, False, False, False])
         if use_source_log_filenames:
-            source_log_filenames_count_to_use = random.randint(1, 3)
+            source_log_filenames_count_to_use = min(random.randint(1, 3), len(self.source_log_filenames))
             source_log_filenames_to_use = random.sample(self.source_log_filenames, source_log_filenames_count_to_use)
             source_log_filenames.extend(source_log_filenames_to_use)
         return source_log_filenames
@@ -55,7 +55,7 @@ class LogViewerAPI(BaseAPI):
         log_levels = []
         use_log_levels = random.choice([True, False, False, False, False])
         if use_log_levels:
-            log_levels_count_to_use = random.randint(1, 3)
+            log_levels_count_to_use = min(random.randint(1, 3), len(self.log_levels))
             log_levels_to_use = random.sample(self.log_levels, log_levels_count_to_use)
             log_levels.extend(log_levels_to_use)
         return log_levels
