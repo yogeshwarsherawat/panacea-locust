@@ -140,7 +140,7 @@ class PanaceaAPIUser(HttpUser):
         payload = api.generate_payload()
 
         self.make_request(
-            api.get_api_method(), api.get_api_endpoint(), json_data=payload
+            api.get_api_method(), api.get_api_endpoint(), json_data=payload, name="/api/v1/insights/reports"
         )
 
     @task(config.TASK_WEIGHTS["list-combos"])
@@ -153,7 +153,7 @@ class PanaceaAPIUser(HttpUser):
         payload = api.generate_payload()
 
         self.make_request(
-            api.get_api_method(), api.get_api_endpoint(), json_data=payload
+            api.get_api_method(), api.get_api_endpoint(), json_data=payload, name=api.get_api_endpoint()
         )
 
     @task(config.TASK_WEIGHTS["events"])
@@ -184,7 +184,7 @@ class PanaceaAPIUser(HttpUser):
         payload = api.generate_payload()
 
         self.make_request(
-            api.get_api_method(), api.get_api_endpoint(), json_data=payload
+            api.get_api_method(), api.get_api_endpoint(), json_data=payload, name=api.get_api_endpoint()
         )
 
     @task(config.TASK_WEIGHTS["report-summary"])
@@ -202,7 +202,7 @@ class PanaceaAPIUser(HttpUser):
             api.get_api_method(),
             api.get_api_endpoint(),
             params=payload,
-            name="/api/v1/insights/ai/report_summary",
+            name=api.get_api_endpoint(),
         )
 
     @task(config.TASK_WEIGHTS["logs-info"])
@@ -220,7 +220,7 @@ class PanaceaAPIUser(HttpUser):
             api.get_api_method(),
             api.get_api_endpoint(),
             params=payload,
-            name="/api/v1/insights/logs/info",
+            name=api.get_api_endpoint(),
         )
 
     @task(config.TASK_WEIGHTS["logs-filter-options"])
@@ -238,7 +238,7 @@ class PanaceaAPIUser(HttpUser):
             api.get_api_method(),
             api.get_api_endpoint(),
             params=payload,
-            name="/api/v1/insights/logs/filter-options",
+            name=api.get_api_endpoint(),
         )
 
     @task(config.TASK_WEIGHTS["logs-search"])
@@ -256,7 +256,7 @@ class PanaceaAPIUser(HttpUser):
             api.get_api_method(),
             api.get_api_endpoint(),
             json_data=payload,
-            name="/api/v1/insights/logs/search/",
+            name=api.get_api_endpoint(),
         )
 
     @task(config.TASK_WEIGHTS["logs-histogram"])
@@ -274,7 +274,7 @@ class PanaceaAPIUser(HttpUser):
             api.get_api_method(),
             api.get_api_endpoint(),
             json_data=payload,
-            name="/api/v1/insights/logs/histogram/",
+            name=api.get_api_endpoint(),
         )
 
     @task(config.TASK_WEIGHTS["logs-heatmap"])
@@ -292,7 +292,7 @@ class PanaceaAPIUser(HttpUser):
             api.get_api_method(),
             api.get_api_endpoint(),
             json_data=payload,
-            name="/api/v1/insights/logs/heatmap/",
+            name=api.get_api_endpoint(),
         )
 
     @task(config.TASK_WEIGHTS["logs-severity-count"])
@@ -310,5 +310,5 @@ class PanaceaAPIUser(HttpUser):
             api.get_api_method(),
             api.get_api_endpoint(),
             json_data=payload,
-            name="/api/v1/insights/logs/severity-count/",
+            name=api.get_api_endpoint(),
         )
